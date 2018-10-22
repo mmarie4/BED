@@ -1,7 +1,7 @@
 /**
  *  \file   main.c
  *  \brief  eZ430-RF2500 radio communication demo
- *  \author Antoine Fraboulet, Tanguy Risset, Dominique Tournier
+ *  \author Antoine Fraboulet, Tanguy Risset, Dominique Tournier, Alexis Saget
  *  \date   2009
  **/
 
@@ -46,6 +46,10 @@
 #define MSG_BYTE_CONTENT 2U
 #define MSG_TYPE_ID_REPLY 0x01
 #define MSG_TYPE_TEMPERATURE 0x02
+#define MSG_TYPE_LED_GREEN 0x03
+
+#define MSG_CONTENT_LED_ON 0x00
+#define MSG_CONTENT_LED_OFF 0x01
 
 
 #define NODE_ID_LOCATION INFOD_START
@@ -129,7 +133,19 @@ static void dump_message(char *buffer)
         pt[1] = buffer[MSG_BYTE_CONTENT];
         printf("  temperature: %d\r\n", temperature);
     }
-
+		if(buffer[MSG_BYTE_TYPE] == MSG_TYPE_LED_GREEN)
+		{
+				if(buffer[MSG_BYTE_CONTENT] == MSG_CONTENT_LED_ON)
+				{
+					//turn green led on
+					led_green_on();
+				}
+				else if(buffer[MSG_BYTE_CONTENT] == MSG_CONTENT_LED_OFF)
+				{
+					//turn green led off
+					led_green_off();
+				}
+		}
 }
 
 static void prompt_node_id()
@@ -343,6 +359,17 @@ static void send_temperature()
     radio_send_message();
 }
 
+static void send_green_led_state(int state)
+{
+		init_message();
+		radio_tx_buffer[MSG_BYTE_TYPE] = MSG_TYPE_LED_GREEN;
+		if(state) radio_tx_buffer[MSG_BYTE_CONTENT]=MSG_CONTENT_LED_ON;
+		else radio_tx_buffer[MSG_BYTE_CONTENT]=MSG_CONTENT_LED_OFF;
+		printf("send green led message: %02x, hex: ", radio_tx_buffer[MSG_BYTE_CONTENT]);
+		radio_send_message();
+		
+}
+
 
 
 static void send_id_reply(unsigned char id)
@@ -379,6 +406,7 @@ static PT_THREAD(thread_uart(struct pt *pt))
 static int antibouncing_flag;
 static int button_pressed_flag;
 
+
 void button_pressed_cb()
 {
     if(antibouncing_flag == 0)
@@ -386,8 +414,18 @@ void button_pressed_cb()
         button_pressed_flag = 1;
         antibouncing_flag = 1;
         TIMER_ANTIBOUNCING = 0;
-        led_green_blink(200); /* 200 timer ticks = 2 seconds */
-    }
+				if(led_green_flag == 0)
+				{
+					led_green_flag=1;        
+					send_green_led_state(1); 
+				}
+				else
+				{
+					led_green_flag=0;
+					send_green_led_state(0); 
+				}
+		}
+
 }
 
 static PT_THREAD(thread_button(struct pt *pt))
