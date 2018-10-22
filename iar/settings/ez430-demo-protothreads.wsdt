@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<Workspace>
+  <ConfigDictionary>
+    
+  <CurrentConfigs><Project>ez430-demo-protothreads/Debug</Project></CurrentConfigs></ConfigDictionary>
+  <Desktop>
+    <Static>
+      <Workspace>
+        <ColumnWidths>
+          
+          
+          
+          
+        <Column0>244</Column0><Column1>27</Column1><Column2>27</Column2><Column3>27</Column3></ColumnWidths>
+      </Workspace>
+    <Build><ColumnWidth0>20</ColumnWidth0><ColumnWidth1>825</ColumnWidth1><ColumnWidth2>220</ColumnWidth2><ColumnWidth3>55</ColumnWidth3></Build><TerminalIO/></Static>
+    <Windows>
+      
+    <Wnd2>
+        <Tabs>
+          <Tab>
+            <Identity>TabID-23188-8175</Identity>
+            <TabName>Workspace</TabName>
+            <Factory>Workspace</Factory>
+            <Session>
+              
+            <NodeDict><ExpandedNode>ez430-demo-protothreads</ExpandedNode></NodeDict></Session>
+          </Tab>
+        </Tabs>
+        
+      <SelectedTab>0</SelectedTab></Wnd2><Wnd3><Tabs><Tab><Identity>TabID-541-9213</Identity><TabName>Build</TabName><Factory>Build</Factory><Session/></Tab></Tabs><SelectedTab>0</SelectedTab></Wnd3></Windows>
+    <Editor>
+      
+      
+      
+      
+    <Pane><Tab><Factory>TextEditor</Factory><Filename>C:\Program Files\IAR Systems\Embedded Workbench 5.4\430\doc\infocenter\index.ENU.html</Filename></Tab><Tab><Factory>TextEditor</Factory><Filename>C:\users\trisset\msp430\ez430\pfe_smazy\ez430-demo-protothreads\src\main.c</Filename><XPos>0</XPos><YPos>10</YPos><SelStart>408</SelStart><SelEnd>408</SelEnd></Tab><ActiveTab>1</ActiveTab><Tab><Factory>TextEditor</Factory><Filename>C:\users\trisset\msp430\ez430\pfe_smazy\ez430-drivers\inc\watchdog.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>104</SelStart><SelEnd>119</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>C:\users\trisset\msp430\ez430\pfe_smazy\ez430-drivers\src\watchdog.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd></Tab></Pane><ActivePane>0</ActivePane><Sizes><Pane><X>1000000</X><Y>1000000</Y></Pane></Sizes><SplitMode>1</SplitMode></Editor>
+    <Positions>
+      
+      
+      
+      
+      
+    <Top><Row0><Sizes><Toolbar-00ab9fe0><key>iaridepm.enu1</key></Toolbar-00ab9fe0></Sizes></Row0><Row1><Sizes><Toolbar-03222960><key>debuggergui.enu1</key></Toolbar-03222960></Sizes></Row1><Row2><Sizes><Toolbar-031ef738><key>430fet1</key></Toolbar-031ef738></Sizes></Row2></Top><Left><Row0><Sizes><Wnd2><Rect><Top>-2</Top><Left>-2</Left><Bottom>544</Bottom><Right>318</Right><x>-2</x><y>-2</y><xscreen>320</xscreen><yscreen>349</yscreen><sizeHorzCX>250000</sizeHorzCX><sizeHorzCY>368143</sizeHorzCY><sizeVertCX>250000</sizeVertCX><sizeVertCY>575949</sizeVertCY></Rect></Wnd2></Sizes></Row0></Left><Right><Row0><Sizes/></Row0></Right><Bottom><Row0><Sizes><Wnd3><Rect><Top>-2</Top><Left>-2</Left><Bottom>360</Bottom><Right>1282</Right><x>-2</x><y>-2</y><xscreen>1284</xscreen><yscreen>362</yscreen><sizeHorzCX>1003125</sizeHorzCX><sizeHorzCY>381857</sizeHorzCY><sizeVertCX>250000</sizeVertCX><sizeVertCY>368143</sizeVertCY></Rect></Wnd3></Sizes></Row0></Bottom><Float><Sizes/></Float></Positions>
+  </Desktop>
+</Workspace>
+
+

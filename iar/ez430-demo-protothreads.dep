@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<project>
+  <fileVersion>2</fileVersion>
+  <fileChecksum>1695406761</fileChecksum>
+  <configuration>
+    <name>Debug</name>
+    <outputs>
+      <file>$PROJ_DIR$\..\..\ez430-drivers\inc\spi.h</file>
+      <file>$PROJ_DIR$\..\src\main.c</file>
+      <file>$PROJ_DIR$\..\..\ez430-drivers\iar\Debug\Exe\flash.r43</file>
+      <file>$PROJ_DIR$\..\..\ez430-drivers\inc\flash.h</file>
+      <file>$PROJ_DIR$\..\protothreads\lc.h</file>
+      <file>$PROJ_DIR$\..\..\ez430-drivers\iar\Debug\Exe\cc2500.r43</file>
+      <file>$TOOLKIT_DIR$\inc\intrinsics.h</file>
+      <file>$PROJ_DIR$\..\..\ez430-drivers\iar\Debug\Exe\adc10.r43</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\xencoding_limits.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\ez430-demo-protothreads.pbd</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\DLib_Product.h</file>
+      <file>$TOOLKIT_DIR$\lib\dlib\dl430fn.h</file>
+      <file>$PROJ_DIR$\..\..\ez430-drivers\inc\adc10.h</file>
+      <file>$PROJ_DIR$\..\..\ez430-drivers\inc\cc2500.h</file>
+      <file>$PROJ_DIR$\..\..\ez430-drivers\iar\Debug\Exe\watchdog.r43</file>
+      <file>$PROJ_DIR$\..\protothreads\pt.h</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\DLib_Threads.h</file>
+      <file>$TOOLKIT_DIR$\inc\msp430x22x4.h</file>
+      <file>$PROJ_DIR$\..\..\ez430-drivers\iar\Debug\Exe\clock.r43</file>
+      <file>$PROJ_DIR$\..\..\ez430-drivers\iar\Debug\Exe\spi.r43</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\stdio.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\main.pbi</file>
+      <file>$PROJ_DIR$\..\..\ez430-drivers\src\watchdog.c</file>
+      <file>$PROJ_DIR$\..\..\ez430-drivers\iar\Debug\Exe\uart.r43</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\stdint.h</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\DLib_Defaults.h</file>
+      <file>$PROJ_DIR$\..\..\ez430-drivers\iar\Debug\Exe\button.r43</file>
+      <file>$TOOLKIT_DIR$\lib\dlib\dl430fn.r43</file>
+      <file>$PROJ_DIR$\Debug\Obj\main.r43</file>
+      <file>$PROJ_DIR$\..\..\ez430-drivers\inc\watchdog.h</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\yvals.h</file>
+      <file>$TOOLKIT_DIR$\config\lnk430F2274.xcl</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\ysizet.h</file>
+      <file>$PROJ_DIR$\..\..\ez430-drivers\inc\button.h</file>
+      <file>$PROJ_DIR$\..\..\ez430-drivers\inc\isr_compat.h</file>
+      <file>$PROJ_DIR$\..\..\ez430-drivers\inc\clock.h</file>
+      <file>$PROJ_DIR$\..\..\ez430-drivers\inc\timer.h</file>
+      <file>$PROJ_DIR$\..\..\ez430-drivers\inc\uart.h</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\string.h</file>
+      <file>$PROJ_DIR$\Debug\Exe\ez430-demo-protothreads.d43</file>
+      <file>$TOOLKIT_DIR$\inc\in430.h</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\limits.h</file>
+      <file>$PROJ_DIR$\..\..\ez430-drivers\iar\Debug\Exe\leds.r43</file>
+      <file>$PROJ_DIR$\..\..\ez430-drivers\iar\Debug\Exe\timer.r43</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\ycheck.h</file>
+      <file>$PROJ_DIR$\..\protothreads\lc-switch.h</file>
+      <file>$PROJ_DIR$\..\..\ez430-drivers\inc\leds.h</file>
+    </outputs>
+    <file>
+      <name>$PROJ_DIR$\..\src\main.c</name>
+      <outputs>
+        <tool>
+          <name>ICC430</name>
+          <file> 28</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 21</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC430</name>
+          <file> 17 40 6 20 44 30 25 11 10 8 16 32 41 38 34 46 35 36 33 37 12 0 13 24 3 29 15 4 45</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 17 40 6 20 44 30 25 10 8 16 32 41 38</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\Debug\Obj\ez430-demo-protothreads.pbd</name>
+      <inputs>
+        <tool>
+          <name>BILINK</name>
+          <file> 21</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>[ROOT_NODE]</name>
+      <outputs>
+        <tool>
+          <name>XLINK</name>
+          <file> 39</file>
+        </tool>
+      </outputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\Debug\Exe\ez430-demo-protothreads.d43</name>
+      <inputs>
+        <tool>
+          <name>XLINK</name>
+          <file> 31 28 7 26 5 18 2 42 19 43 23 14 27</file>
+        </tool>
+      </inputs>
+    </file>
+  </configuration>
+  <configuration>
+    <name>Release</name>
+    <outputs/>
+    <forcedrebuild>
+      <name>[MULTI_TOOL]</name>
+      <tool>XLINK</tool>
+    </forcedrebuild>
+    <forcedrebuild>
+      <name>[REBUILD_ALL]</name>
+    </forcedrebuild>
+  </configuration>
+</project>
+
+
