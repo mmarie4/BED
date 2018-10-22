@@ -47,6 +47,7 @@
 #define MSG_TYPE_ID_REPLY 0x01
 #define MSG_TYPE_TEMPERATURE 0x02
 
+
 #define NODE_ID_LOCATION INFOD_START
 
 #define NODE_ID_UNDEFINED 0x00
@@ -64,6 +65,44 @@ static uint16_t timer[NUM_TIMERS];
 #define TIMER_RADIO_SEND timer[3]
 #define TIMER_ID_INPUT timer[4]
 #define TIMER_RADIO_FORWARD timer[5]
+
+const RF_SETTINGS configrf = {
+    0x12,   // FSCTRL1   Frequency synthesizer control.
+    0x00,   // FSCTRL0   Frequency synthesizer control.
+    0x5D,   // FREQ2     Frequency control word, high byte.
+    0x93,   // FREQ1     Frequency control word, middle byte.
+    0xB1,   // FREQ0     Frequency control word, low byte.
+    0x2D,   // MDMCFG4   Modem configuration.
+    0x3B,   // MDMCFG3   Modem configuration.
+    0xF3,   // MDMCFG2   Modem configuration.
+    0x22,   // MDMCFG1   Modem configuration.
+    0xF8,   // MDMCFG0   Modem configuration.
+    0x04,   // CHANNR    Channel number.
+    0x01,   // DEVIATN   Modem deviation setting (when FSK modulation is enabled).
+    0xB6,   // FREND1    Front end RX configuration.
+    0x10,   // FREND0    Front end TX configuration.
+    0x18,   // MCSM0     Main Radio Control State Machine configuration.
+    0x1D,   // FOCCFG    Frequency Offset Compensation Configuration.
+    0x1C,   // BSCFG     Bit synchronization Configuration.
+    0xC7,   // AGCCTRL2  AGC control.
+    0x00,   // AGCCTRL1  AGC control.
+    0xB0,   // AGCCTRL0  AGC control.
+    0xEA,   // FSCAL3    Frequency synthesizer calibration.
+    0x0A,   // FSCAL2    Frequency synthesizer calibration.
+    0x00,   // FSCAL1    Frequency synthesizer calibration.
+    0x11,   // FSCAL0    Frequency synthesizer calibration.
+    0x59,   // FSTEST    Frequency synthesizer calibration.
+    0x88,   // TEST2     Various test settings.
+    0x31,   // TEST1     Various test settings.
+    0x0B,   // TEST0     Various test settings.
+    0x07,   // FIFOTHR   RXFIFO and TXFIFO thresholds.
+    0x29,   // IOCFG2    GDO2 output pin configuration.
+    0x06,   // IOCFG0D   GDO0 output pin configuration. Refer to SmartRF® Studio User Manual for detailed pseudo register explanation.
+    0x04,   // PKTCTRL1  Packet automation control.
+    0x05,   // PKTCTRL0  Packet automation control.
+    0x00,   // ADDR      Device address.
+    0xFF    // PKTLEN    Packet length.
+};
 
 static void printhex(char *buffer, unsigned int len)
 {
@@ -450,6 +489,7 @@ int main(void)
     /* radio init */
     spi_init();
     cc2500_init();
+		cc2500_configure(& configrf);
     cc2500_rx_register_buffer(radio_tx_buffer, PKTLEN);
     cc2500_rx_register_cb(radio_cb);
     cc2500_rx_enter();
