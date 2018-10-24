@@ -27,7 +27,7 @@ class Reader(Thread):
             ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
 
             # Handshake
-             ok = b''
+            ok = b''
             while ok.strip() != b'OK':
                 ser.write(b"1")
                 ok = ser.readline()
