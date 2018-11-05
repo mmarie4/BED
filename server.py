@@ -25,7 +25,7 @@ class Reader(Thread):
                 # # Messages : type:rank:nodeID:value
                 data = line.split(":")
                 print("data read on serial port:", data)
-                if(data[0] == "3"):
+                if(data[0] == "2"):
                     nodeID = data[2]
                     temperature = data[3]
                     temperature = temperature.replace("\r\n", "")
