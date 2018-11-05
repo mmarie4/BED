@@ -17,29 +17,21 @@ class Reader(Thread):
 
     def run(self):
         while True:
-            # read input instead of serial for testing
-            '''
-            id = input("type nodeID: ")
-            temperature = input("type temperature: ")
-            temp[id] = temperature
-            print("temp[", id, "] :", temp[id])
-            '''
-            ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
-
-            # Handshake
-            ok = b''
-            while ok.strip() != b'OK':
-                ser.write(b"1")
-                ok = ser.readline()
-                print("Handshake OK!\n")
-
-            print("connected to: " + ser.portstr)
+            ser = serial.Serial('/dev/ttyACM0', 9600)
 
             while True:
-                line = ser.readline()
+                line = ser.readline().decode('utf-8')
                 # parse nodeID et temperature
-                # temp[nodeID] = temperature 
-
+                # # Messages : type:rank:nodeID:value
+                data = line.split(":")
+                print("data read on serial port:", data)
+                if(data[0] == "3"):
+                    nodeID = data[2]
+                    temperature = data[3]
+                    temperature = temperature.replace("\r\n", "")
+                    temperature = float(temperature)/10
+                    print(nodeID, temperature)
+                    self.temp[nodeID] = str(temperature)
             ser.close()
 
 # =================================================
@@ -68,13 +60,10 @@ class Server(Thread):
         
         @app.route('/all')
         def index():
-            str_keys = ""
-            str_values = ""
+            str_temp = ""
             for key in temp.keys():
-                str_keys += key + " "
-            for val in temp.values():
-                str_values += val + " "
-            return str_keys[:-1] + "-" + str_values[:-1]
+                str_temp += key + ":" + temp[key] + "\r\n"
+            return str_temp
 
         # -------------- Launch app ------------------------
         if __name__ == '__main__':
