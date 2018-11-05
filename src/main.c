@@ -43,13 +43,17 @@
 #define PKTLEN 7
 #define MSG_BYTE_TYPE 0U
 #define MSG_BYTE_NODE_ID 1U
-#define MSG_BYTE_CONTENT 2U
+#define MSG_BYTE_CONTENT 2U //2U and 3U
+#define MSG_BYTE_RANK 4U
+#define MSG_BYTE_TARGET 5U
 #define MSG_TYPE_ID_REPLY 0x01
 #define MSG_TYPE_TEMPERATURE 0x02
 #define MSG_TYPE_LED_GREEN 0x03
 
 #define MSG_CONTENT_LED_ON 0x00
 #define MSG_CONTENT_LED_OFF 0x01
+#define SINK_TARGET 0x00
+#define BROADCAST_TARGET 0xFF
 
 
 #define NODE_ID_LOCATION INFOD_START
@@ -60,6 +64,7 @@
 /* the same in timer ticks */
 #define ID_INPUT_TIMEOUT_TICKS (ID_INPUT_TIMEOUT_SECONDS*1000/TIMER_PERIOD_MS)
 static unsigned char node_id;
+static unsigned int node_rank;
 
 #define NUM_TIMERS 6
 static uint16_t timer[NUM_TIMERS];
@@ -119,30 +124,31 @@ static void printhex(char *buffer, unsigned int len)
 
 static void dump_message(char *buffer)
 {
-    printf("message received\r\n  content: ");
-    printhex(buffer, PKTLEN);
-    printf("\r\n  from node: 0x");
-    printf("%02X\r\n", buffer[MSG_BYTE_NODE_ID]);
+
+    printf("%01X:%01X:%01X:", buffer[MSG_BYTE_TYPE], buffer[MSG_BYTE_RANK], buffer[MSG_BYTE_NODE_ID]);
 
 
     if(buffer[MSG_BYTE_TYPE] == MSG_TYPE_TEMPERATURE)
     {
-        unsigned int temperature;
-        char *pt = (char *) &temperature;
+		unsigned int temperature;
+    	char *pt = (char *) &temperature;
         pt[0] = buffer[MSG_BYTE_CONTENT + 1];
         pt[1] = buffer[MSG_BYTE_CONTENT];
-        printf("  temperature: %d\r\n", temperature);
+        printf("%d\r\n", temperature);
+        
     }
-		if(buffer[MSG_BYTE_TYPE] == MSG_TYPE_LED_GREEN)
+		if(buffer[MSG_BYTE_TYPE] == MSG_TYPE_LED_GREEN && (buffer[MSG_BYTE_TARGET] == node_id || buffer[MSG_BYTE_TARGET] == BROADCAST_TARGET))
 		{
 				if(buffer[MSG_BYTE_CONTENT] == MSG_CONTENT_LED_ON)
 				{
+					printf("ON\r\n");
 					//turn green led on
 					led_green_on();
 				}
 				else if(buffer[MSG_BYTE_CONTENT] == MSG_CONTENT_LED_OFF)
 				{
 					//turn green led off
+					printf("OFF\r\n");
 					led_green_off();
 				}
 		}
@@ -332,7 +338,7 @@ int uart_cb(uint8_t data)
 }
 
 /* to be called from within a protothread */
-static void init_message()
+static void init_message(int target)
 {
     unsigned int i;
     for(i = 0; i < PKTLEN; i++)
@@ -340,12 +346,15 @@ static void init_message()
         radio_tx_buffer[i] = 0x00;
     }
     radio_tx_buffer[MSG_BYTE_NODE_ID] = node_id;
+    radio_tx_buffer[MSG_BYTE_RANK] = node_rank;
+    radio_tx_buffer[MSG_BYTE_TARGET] = target;
+
 }
 
 /* to be called from within a protothread */
 static void send_temperature()
 {
-    init_message();
+    init_message(SINK_TARGET);
     radio_tx_buffer[MSG_BYTE_TYPE] = MSG_TYPE_TEMPERATURE;
     int temperature = adc10_sample_temp();
     printf("temperature: %d, hex: ", temperature);
@@ -359,9 +368,9 @@ static void send_temperature()
     radio_send_message();
 }
 
-static void send_green_led_state(int state)
+static void send_green_led_state(int state, int target)
 {
-		init_message();
+		init_message(target);
 		radio_tx_buffer[MSG_BYTE_TYPE] = MSG_TYPE_LED_GREEN;
 		if(state) radio_tx_buffer[MSG_BYTE_CONTENT]=MSG_CONTENT_LED_ON;
 		else radio_tx_buffer[MSG_BYTE_CONTENT]=MSG_CONTENT_LED_OFF;
@@ -374,7 +383,7 @@ static void send_green_led_state(int state)
 
 static void send_id_reply(unsigned char id)
 {
-    init_message();
+    init_message(SINK_TARGET);
     radio_tx_buffer[MSG_BYTE_TYPE] = MSG_TYPE_ID_REPLY;
     radio_tx_buffer[MSG_BYTE_CONTENT] = id;
     radio_send_message();
@@ -414,17 +423,8 @@ void button_pressed_cb()
         button_pressed_flag = 1;
         antibouncing_flag = 1;
         TIMER_ANTIBOUNCING = 0;
-				if(led_green_flag == 0)
-				{
-					led_green_flag=1;        
-					send_green_led_state(1); 
-				}
-				else
-				{
-					led_green_flag=0;
-					send_green_led_state(0); 
-				}
-		}
+				
+	}
 
 }
 
@@ -439,7 +439,17 @@ static PT_THREAD(thread_button(struct pt *pt))
         TIMER_ID_INPUT = 0;
 
         /* ask locally for a node id and broadcast an id request */
-        prompt_node_id();
+        //prompt_node_id();
+		if(led_green_flag == 0)
+		{
+			led_green_flag=1;        
+			send_green_led_state(1, BROADCAST_TARGET); 
+		}
+		else
+		{
+			led_green_flag=0;
+			send_green_led_state(0, BROADCAST_TARGET); 
+		}
 
         button_pressed_flag = 0;
     }
@@ -537,9 +547,11 @@ int main(void)
     node_id = *((char *) NODE_ID_LOCATION);
 #ifdef ANCHOR
     printf("ANCHOR RUNNING: \r\n");
+	node_rank = 0;
 #endif
 #ifdef TAG
     printf("TAG RUNNING: \r\n");
+	node_rank = 0xFF;
 #endif
     printf("node id retrieved from flash: %d\r\n", node_id);
     button_enable_interrupt();
@@ -555,6 +567,8 @@ int main(void)
 #ifdef TAG
         thread_periodic_send(&pt[5]);
 #endif
-        //thread_button(&pt[6]);
+#ifdef ANCHOR
+        thread_button(&pt[6]);
+#endif
     }
 }
