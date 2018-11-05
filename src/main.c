@@ -299,8 +299,7 @@ void radio_cb(uint8_t *buffer, int size, int8_t rssi)
 static void radio_send_message()
 {
     cc2500_utx(radio_tx_buffer, PKTLEN);
-    printf("sent: ");
-    printhex(radio_tx_buffer, PKTLEN);
+	printf("%01X:%01X:%01X:%02x", radio_tx_buffer[MSG_BYTE_TYPE], radio_tx_buffer[MSG_BYTE_RANK], radio_tx_buffer[MSG_BYTE_NODE_ID], radio_tx_buffer[MSG_BYTE_CONTENT]);
     putchar('\r');
     putchar('\n');
     cc2500_rx_enter();
