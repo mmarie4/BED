@@ -9,7 +9,7 @@ Deux threads :
   
   - s_thread qui fait tourner le serveur Flask pour le web service 
     - Route /X renvoie la température associée au node qui a pour id l'entier X (ex.: localhost:5000/2 renvoie temp[2])
-    - Route /all renvoie une chaine de caractères de la forme : node1 node2 node3-temp1 temp2 temp3 (qui est donc facilement parsable en utilisant " " et "-" comme séparateurs)
+    - Route /all renvoie une chaine de caractères de la forme : node1:temp1\r\nnode2:temp2\r\n (qui est donc facilement parsable en utilisant ":" et "\r\n" comme séparateurs)
   
   
 # Todo
