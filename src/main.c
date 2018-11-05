@@ -527,7 +527,7 @@ int main(void)
     /* radio init */
     spi_init();
     cc2500_init();
-		cc2500_configure(& configrf);
+    cc2500_configure(& configrf);
     cc2500_rx_register_buffer(radio_tx_buffer, PKTLEN);
     cc2500_rx_register_cb(radio_cb);
     cc2500_rx_enter();
@@ -548,13 +548,13 @@ int main(void)
     /* simple cycle scheduling */
     while(1) {
         thread_led_red(&pt[0]);
-        thread_led_green(&pt[1]);
+        //thread_led_green(&pt[1]);
         thread_uart(&pt[2]);
         thread_antibouncing(&pt[3]);
         thread_process_msg(&pt[4]);
 #ifdef TAG
         thread_periodic_send(&pt[5]);
 #endif
-        thread_button(&pt[6]);
+        //thread_button(&pt[6]);
     }
 }
