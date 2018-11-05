@@ -6,7 +6,7 @@ import serial
 
 # ------- Init ------------------------------------
 # temp = {int nodeID: double temperature}
-temp = {"1": "27.6", "2": "31.0", "3":"24.6"}
+temp = {}   
 
 # =================================================
 # Thread reading the temperature on the port
@@ -24,8 +24,8 @@ class Reader(Thread):
                 # parse nodeID et temperature
                 # # Messages : type:rank:nodeID:value
                 data = line.split(":")
-                print("data read on serial port:", data)
-                if(data[0] == "3"):
+                print("data read on serial port:", line)
+                if(data[0] == "2"):
                     nodeID = data[2]
                     temperature = data[3]
                     temperature = temperature.replace("\r\n", "")

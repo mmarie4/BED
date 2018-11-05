@@ -34,7 +34,7 @@
 
 #include "pt.h"
 
-#define DBG_PRINTF printf
+#define DBG_PRINTF 
 
 
 /* 100 Hz timer A */
@@ -53,7 +53,7 @@
 #define MSG_CONTENT_LED_ON 0x00
 #define MSG_CONTENT_LED_OFF 0x01
 #define SINK_TARGET 0x00
-#define BROADCAST_TARGET 0xFF
+#define BROADCAST_TARGET 0X00
 
 
 #define NODE_ID_LOCATION INFOD_START
@@ -64,7 +64,7 @@
 /* the same in timer ticks */
 #define ID_INPUT_TIMEOUT_TICKS (ID_INPUT_TIMEOUT_SECONDS*1000/TIMER_PERIOD_MS)
 static unsigned char node_id;
-static unsigned int node_rank;
+static uint8_t node_rank;
 
 #define NUM_TIMERS 6
 static uint16_t timer[NUM_TIMERS];
@@ -134,24 +134,28 @@ static void dump_message(char *buffer)
     	char *pt = (char *) &temperature;
         pt[0] = buffer[MSG_BYTE_CONTENT + 1];
         pt[1] = buffer[MSG_BYTE_CONTENT];
-        printf("%d\r\n", temperature);
+        printf("%d:", temperature);
         
     }
-		if(buffer[MSG_BYTE_TYPE] == MSG_TYPE_LED_GREEN && (buffer[MSG_BYTE_TARGET] == node_id || buffer[MSG_BYTE_TARGET] == BROADCAST_TARGET))
+		DBG_PRINTF("target:%01X\r\n",buffer[MSG_BYTE_TARGET]);
+		DBG_PRINTF("broadcast value:%01X\r\n",BROADCAST_TARGET);
+		if(buffer[MSG_BYTE_TYPE] == MSG_TYPE_LED_GREEN && buffer[MSG_BYTE_TARGET]==BROADCAST_TARGET)
 		{
 				if(buffer[MSG_BYTE_CONTENT] == MSG_CONTENT_LED_ON)
 				{
-					printf("ON\r\n");
+					printf("ON:");
 					//turn green led on
 					led_green_on();
 				}
 				else if(buffer[MSG_BYTE_CONTENT] == MSG_CONTENT_LED_OFF)
 				{
 					//turn green led off
-					printf("OFF\r\n");
+					printf("OFF:");
 					led_green_off();
 				}
 		}
+		printf("%01X\r\n", buffer[MSG_BYTE_TARGET]);
+		
 }
 
 static void prompt_node_id()
@@ -299,7 +303,7 @@ void radio_cb(uint8_t *buffer, int size, int8_t rssi)
 static void radio_send_message()
 {
     cc2500_utx(radio_tx_buffer, PKTLEN);
-	printf("%01X:%01X:%01X:%02x", radio_tx_buffer[MSG_BYTE_TYPE], radio_tx_buffer[MSG_BYTE_RANK], radio_tx_buffer[MSG_BYTE_NODE_ID], radio_tx_buffer[MSG_BYTE_CONTENT]);
+	printf("%01X:%01X:%01X:%02x:%01X", radio_tx_buffer[MSG_BYTE_TYPE], radio_tx_buffer[MSG_BYTE_RANK], radio_tx_buffer[MSG_BYTE_NODE_ID], radio_tx_buffer[MSG_BYTE_CONTENT], radio_tx_buffer[MSG_BYTE_TARGET]);
     putchar('\r');
     putchar('\n');
     cc2500_rx_enter();
@@ -337,7 +341,7 @@ int uart_cb(uint8_t data)
 }
 
 /* to be called from within a protothread */
-static void init_message(int target)
+static void init_message(uint8_t target)
 {
     unsigned int i;
     for(i = 0; i < PKTLEN; i++)
@@ -347,6 +351,7 @@ static void init_message(int target)
     radio_tx_buffer[MSG_BYTE_NODE_ID] = node_id;
     radio_tx_buffer[MSG_BYTE_RANK] = node_rank;
     radio_tx_buffer[MSG_BYTE_TARGET] = target;
+	DBG_PRINTF("init target to:%01X\r\n",radio_tx_buffer[MSG_BYTE_TARGET]);
 
 }
 
@@ -356,10 +361,9 @@ static void send_temperature()
     init_message(SINK_TARGET);
     radio_tx_buffer[MSG_BYTE_TYPE] = MSG_TYPE_TEMPERATURE;
     int temperature = adc10_sample_temp();
-    printf("temperature: %d, hex: ", temperature);
-    printhex((char *) &temperature, 2);
-    putchar('\r');
-    putchar('\n');
+    DBG_PRINTF("temperature: %d, hex: ", temperature);
+    DBG_PRINTF('\r');
+    DBG_PRINTF('\n');
     /* msp430 is little endian, convert temperature to network order */
     char *pt = (char *) &temperature;
     radio_tx_buffer[MSG_BYTE_CONTENT] = pt[1];
@@ -367,13 +371,13 @@ static void send_temperature()
     radio_send_message();
 }
 
-static void send_green_led_state(int state, int target)
+static void send_green_led_state(int state, unsigned char target)
 {
 		init_message(target);
 		radio_tx_buffer[MSG_BYTE_TYPE] = MSG_TYPE_LED_GREEN;
 		if(state) radio_tx_buffer[MSG_BYTE_CONTENT]=MSG_CONTENT_LED_ON;
 		else radio_tx_buffer[MSG_BYTE_CONTENT]=MSG_CONTENT_LED_OFF;
-		printf("send green led message: %02x, hex: ", radio_tx_buffer[MSG_BYTE_CONTENT]);
+		DBG_PRINTF("send green led message: %02x, hex: ", radio_tx_buffer[MSG_BYTE_CONTENT]);
 		radio_send_message();
 		
 }
@@ -546,7 +550,7 @@ int main(void)
     node_id = *((char *) NODE_ID_LOCATION);
 #ifdef ANCHOR
     printf("ANCHOR RUNNING: \r\n");
-	node_rank = 0;
+	node_rank = 0x00;
 #endif
 #ifdef TAG
     printf("TAG RUNNING: \r\n");
