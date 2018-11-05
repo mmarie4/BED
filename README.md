@@ -13,8 +13,4 @@ Deux threads :
   
   
 # Todo
-- Penser à installer serial sur le Raspberry Pi --> pip install pyserial
-- Installer Flask aussi
-- Vérifier que ça lit bien sur le port serial les infos envoyées par le msp
-- Changer le format des messages envoyés par le msp pour qu'ils soient facilement parsable par le Raspberry Pi 
-- Parser les messages dans le server.py et update le dictionnaire temp
+Dossier à placer dans ez430-applications-students
